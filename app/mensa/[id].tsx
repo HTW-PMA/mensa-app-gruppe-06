@@ -45,7 +45,7 @@ export default function MensaDetailScreen() {
 
   useEffect(() => {
     const fetchSpeiseplan = async () => {
-      const today = "2025-05-05"; //new Date().toISOString().split("T")[0];
+      const today = new Date().toISOString().split("T")[0];
       const cacheKey = `meals_${today}_canteen_${id}`;
 
       try {
