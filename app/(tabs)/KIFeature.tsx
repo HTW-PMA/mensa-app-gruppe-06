@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, Button, Alert, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const GEMINI_API_KEY = 'AIzaSyCvfpW-aL6Ro8yF3vM4RH1mOHDXEEDx_1w';
 
@@ -33,7 +34,6 @@ export default function KIFeature() {
         setLoading(true);
         setSuggestion(null);
 
-        // ✨ Prompt auf Deutsch
         const prompt = `Hier ist eine Liste von Gerichten: ${meals.join(', ')}. Schlage ein Gericht vor, das heute eine gute Wahl wäre, und erkläre in einem kurzen Satz warum.`;
 
         try {
@@ -73,35 +73,43 @@ export default function KIFeature() {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>🎓 KI Funktion – Essensvorschlag</Text>
-            <Button title="🔍 Gericht vorschlagen" onPress={askGemini} disabled={loading} />
+        <SafeAreaView style={styles.safeContainer}>
+            <View style={styles.container}>
+                <Text style={styles.title}>🎓 KI Funktion – Essensvorschlag</Text>
+                <Button title="🔍 Gericht vorschlagen" onPress={askGemini} disabled={loading} />
 
-            {loading && (
-                <View style={{ marginTop: 20 }}>
-                    <ActivityIndicator size="large" color="#007bff" />
-                </View>
-            )}
+                {loading && (
+                    <View style={{ marginTop: 20 }}>
+                        <ActivityIndicator size="large" color="#007bff" />
+                    </View>
+                )}
 
-            {suggestion && (
-                <View style={styles.result}>
-                    <Text style={styles.resultText}>{suggestion}</Text>
-                </View>
-            )}
-        </View>
+                {suggestion && (
+                    <View style={styles.result}>
+                        <Text style={styles.resultText}>{suggestion}</Text>
+                    </View>
+                )}
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
+    safeContainer: {
+        flex: 1,
+        backgroundColor: '#fff',
+    },
     container: {
         flex: 1,
-        padding: 24,
+        paddingHorizontal: 24,
+        paddingTop: 32, // Extra Abstand nach oben!
         backgroundColor: '#fff',
     },
     title: {
-        fontSize: 20,
+        fontSize: 22,
         fontWeight: 'bold',
-        marginBottom: 24,
+        marginBottom: 28,
+        textAlign: 'center',
     },
     result: {
         marginTop: 30,

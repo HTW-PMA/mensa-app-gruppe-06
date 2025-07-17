@@ -8,6 +8,7 @@ import {
     TouchableOpacity,
     Animated,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 type Price = {
     priceType: string;
@@ -96,48 +97,53 @@ export default function SurpriseMe() {
     };
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.title}>🎲 Überrasch mich!</Text>
+        <SafeAreaView style={styles.safeContainer}>
+            <View style={styles.container}>
+                <Text style={styles.title}>🎲 Überrasch mich!</Text>
 
-            <TouchableOpacity style={styles.button} onPress={fetchRandomMeal}>
-                <Text style={styles.buttonText}>Zeig mir ein Gericht 🍽️</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={fetchRandomMeal}>
+                    <Text style={styles.buttonText}>Zeig mir ein Gericht 🍽️</Text>
+                </TouchableOpacity>
 
-            {loading && (
-                <View style={styles.center}>
-                    <ActivityIndicator size="large" color="#007bff" />
-                    <Text style={{ marginTop: 10 }}>Lade dein Überraschungsgericht...</Text>
-                </View>
-            )}
+                {loading && (
+                    <View style={styles.center}>
+                        <ActivityIndicator size="large" color="#007bff" />
+                        <Text style={{ marginTop: 10 }}>Lade dein Überraschungsgericht...</Text>
+                    </View>
+                )}
 
-            {randomMeal && (
-                <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
-                    <Text style={styles.name}>{randomMeal.name || 'Kein Name'}</Text>
-                    <Text>Kategorie: {randomMeal.category || 'Unbekannt'}</Text>
-                    <Text>Datum: {randomMeal.date}</Text>
-                    <Text>Mensa-ID: {randomMeal.canteenId}</Text>
-
-                    {randomMeal.prices?.length ? (
-                        randomMeal.prices.map((price, idx) => (
-                            <Text key={idx}>
-                                Preis ({price.priceType}): {price.price} €
-                            </Text>
-                        ))
-                    ) : (
-                        <Text>Keine Preisinformationen.</Text>
-                    )}
-                </Animated.View>
-            )}
-        </View>
+                {randomMeal && (
+                    <Animated.View style={[styles.card, { opacity: fadeAnim }]}>
+                        <Text style={styles.name}>{randomMeal.name || 'Kein Name'}</Text>
+                        <Text>Kategorie: {randomMeal.category || 'Unbekannt'}</Text>
+                        <Text>Datum: {randomMeal.date}</Text>
+                        <Text>Mensa-ID: {randomMeal.canteenId}</Text>
+                        {randomMeal.prices?.length ? (
+                            randomMeal.prices.map((price, idx) => (
+                                <Text key={idx}>
+                                    Preis ({price.priceType}): {price.price} €
+                                </Text>
+                            ))
+                        ) : (
+                            <Text>Keine Preisinformationen.</Text>
+                        )}
+                    </Animated.View>
+                )}
+            </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        padding: 16,
-        paddingTop: 48,
-        backgroundColor: '#fff',
+    safeContainer: {
         flex: 1,
+        backgroundColor: '#fff',
+    },
+    container: {
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingTop: 36, // Ausreichend Platz nach oben!
+        backgroundColor: '#fff',
     },
     title: {
         fontSize: 24,
